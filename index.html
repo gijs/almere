@@ -31,7 +31,7 @@
 		var drivetime = 60;
 
 		var scale = d3.scale.linear();
-		scale.domain([0, 300]);
+		scale.domain([0, 600]);
 		scale.range(["#CEDAE5", "#690073"]);
 
 		var isochroneLayers = L.layerGroup();
@@ -81,7 +81,7 @@
 		window.onload = function() {
 		  var text = new DriveTime();
 		  var gui = new dat.GUI();
-		  var drivetimeController = gui.add(text, 'drivetime', 1, 300);
+		  var drivetimeController = gui.add(text, 'drivetime', 1, 600);
 	      gui.add(text, 'clear');
 
 		  drivetimeController.onFinishChange(function(value) {

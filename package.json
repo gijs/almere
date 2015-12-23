@@ -5,14 +5,11 @@
   "main": "server.js",
   "dependencies": {
     "osrm-isochrone": "^1.0.1",
-    "polyline": "",
+    "polyline": "0.2.0",
     "ejs": "2.3.3",
     "express": "4.13.3",
-    "body-parser": ""    
+    "body-parser": "1.14.2"    
   },
-  "engines": {
-    "node": "4.1.1"
-  },  
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

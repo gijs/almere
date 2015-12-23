@@ -4,14 +4,14 @@ var express = require('express');
 var app = express();
 
 var resolution = 25; // sample resolution
-var network = './almere.osrm' // prebuilt almere osrm network file
+var network = './data/almere.osrm' // prebuilt almere osrm network file
 
 
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 })); 
-app.set('port', (process.env.PORT || 5000));
+app.set('port', (process.env.PORT || 5001));
 
 app.use('/js', express.static(__dirname + '/js'));
 app.use('/img', express.static(__dirname + '/img'));
@@ -45,7 +45,7 @@ app.get('/api/v1/isochrone', function(req, res) {
 });
 
 
-app.listen(app.get('port'), function() {
+app.listen(app.get('port'), '0.0.0.0', function() {
   console.log('Node app is running on port', app.get('port'));
 });
 
