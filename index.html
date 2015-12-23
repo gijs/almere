@@ -1,0 +1,94 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Almere Bereikbaarheid: interactieve demo</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+	<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="js/dat.gui.min.js"></script>
+	<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+	<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+
+	<style>
+		body {
+			padding: 0;
+			margin: 0;
+		}
+		html, body, #map {
+			height: 100%;
+		}
+	</style>
+</head>
+<body>
+	<div id="map"></div>
+
+	<script>
+		var map = L.map('map');
+		var drivetime = 60;
+
+		var scale = d3.scale.linear();
+		scale.domain([0, 300]);
+		scale.range(["#CEDAE5", "#690073"]);
+
+		var isochroneLayers = L.layerGroup();
+		isochroneLayers.addTo(map);
+
+		L.tileLayer('https://{s}.tiles.mapbox.com/v3/nelenschuurmans.iaa98k8k/{z}/{x}/{y}.png', {
+			maxZoom: 18,
+			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+				'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+				'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+			id: 'mapbox.streets'
+		}).addTo(map);
+
+		map.setView([52.3680,5.2232], 16);
+
+		map.on('click', function(e) {
+			$.ajax({
+			  url: "/api/v1/isochrone?lat=" + e.latlng.lng + "&lon=" + e.latlng.lat + "&drivetime=" + window.drivetime,
+			  cache: false,
+			  success: function(result){
+			    L.geoJson(result, {
+			    	"onEachFeature": onEachFeature,
+			    	"style": {
+						"color": scale(window.drivetime),
+						"weight": 5,
+						"opacity": 0.65			    		
+			    	}
+			    }).addTo(isochroneLayers);
+			  }
+			});
+		});
+
+		function onEachFeature(feature, layer) {
+		    // does this feature have a property named popupContent?
+		    if (feature.properties && feature.properties.eta) {
+		        layer.bindPopup("Bereikbaar < " + Math.round(feature.properties.eta/60) + " min.");
+		    }
+		}
+
+		var DriveTime = function() {
+		  this.drivetime = window.drivetime;
+		  this.clear = function() {
+		  	isochroneLayers.clearLayers();
+		  };
+		};
+
+		window.onload = function() {
+		  var text = new DriveTime();
+		  var gui = new dat.GUI();
+		  var drivetimeController = gui.add(text, 'drivetime', 1, 300);
+	      gui.add(text, 'clear');
+
+		  drivetimeController.onFinishChange(function(value) {
+			  window.drivetime = value;
+		  });
+		};
+
+	</script>
+</body>
+</html>

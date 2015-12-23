@@ -1,0 +1,19 @@
+{
+  "name": "isochrone-almere",
+  "version": "1.0.0",
+  "description": "Isochrone demo Almere",
+  "main": "server.js",
+  "dependencies": {
+    "osrm-isochrone": "^1.0.1",
+    "polyline": "",
+    "ejs": "2.3.3",
+    "express": "4.13.3",
+    "body-parser": ""    
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
